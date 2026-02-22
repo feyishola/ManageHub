@@ -371,7 +371,11 @@ impl MembershipTokenContract {
     ) {
         let index_key = DataKey::MetadataIndex(attribute_key.clone(), attribute_value.clone());
 
-        if let Some(token_ids) = env.storage().persistent().get::<DataKey, Vec<BytesN<32>>>(&index_key) {
+        if let Some(token_ids) = env
+            .storage()
+            .persistent()
+            .get::<DataKey, Vec<BytesN<32>>>(&index_key)
+        {
             // Find and remove the token ID
             let mut new_ids = Vec::new(env);
             for id in token_ids.iter() {
@@ -584,7 +588,8 @@ impl MembershipTokenContract {
         // Validate and apply updates, tracking index changes
         for key in updates.keys() {
             if let Some(new_value) = updates.get(key.clone()) {
-                validate_attribute(&key, &new_value).map_err(|_| Error::MetadataValidationFailed)?;
+                validate_attribute(&key, &new_value)
+                    .map_err(|_| Error::MetadataValidationFailed)?;
 
                 // If attribute already exists, remove old index entry
                 if let Some(old_value) = metadata.attributes.get(key.clone()) {
