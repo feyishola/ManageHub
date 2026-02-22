@@ -5,18 +5,22 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { NewsletterModule } from './newsletter/newsletter.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guards/jwt.guard';
+import { JwtAuthGuard } from './auth/guard/jwt.auth.guard';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { AttendanceModule } from './attendance/attendance.module';
-import { StaffModule } from './staff/staff.module';
+import { BullModule } from '@nestjs/bull';
+import { ScheduleModule } from '@nestjs/schedule';
+import { NewsletterModule } from './newsletter/newsletter.module';
+import { EmailModule } from './email/email.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         name: 'short',
@@ -33,7 +37,21 @@ import { StaffModule } from './staff/staff.module';
         ttl: 60000, // 1 minute
         limit: 100, // 100 requests per minute
       },
+      { name: 'newsletter', ttl: 60_000, limit: 10 },
+      { name: 'contact', ttl: 60_000, limit: 5 },
     ]),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get<string>('REDIS_HOST') || 'localhost',
+          port: configService.get<number>('REDIS_PORT') || 6379,
+          password: configService.get<string>('REDIS_PASSWORD'),
+          db: configService.get<number>('REDIS_DB') || 0,
+        },
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -58,11 +76,12 @@ import { StaffModule } from './staff/staff.module';
         };
       },
     }),
+    EmailModule,
     AuthModule,
     UsersModule,
     NewsletterModule,
-    AttendanceModule,
-    StaffModule,
+    ContactModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [

@@ -6,7 +6,6 @@ import { mutationKeys } from "../../keys/mutationKeys";
 import { LoginUser } from "@/lib/types/user";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { resolve } from "path";
 
 /**
  * Custom hook for user login
@@ -27,8 +26,7 @@ export const useLoginUser = () => {
       
       return await login(data);
     },
-    onSuccess: (data) => {
-      console.log("Login success:", data);
+    onSuccess: () => {
       toast.success("Login successful");
       
       // Handle redirect after successful login
@@ -39,8 +37,12 @@ export const useLoginUser = () => {
         router.push("/dashboard");
       }
     },
-    onError: (error) => {
-      console.error("Login failed:", error);
+    onError: (error: any) => {
+      if (error?.unverified) {
+        toast.info("Please verify your email to continue.");
+        router.push(`/verify-otp?email=${encodeURIComponent(error.email)}`);
+        return;
+      }
       toast.error("Login failed. Please check your credentials.");
     },
   });

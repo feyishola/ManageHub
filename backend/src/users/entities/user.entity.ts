@@ -1,4 +1,4 @@
-                    import {
+import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -48,6 +48,10 @@ export class User {
   passwordResetExpiresIn?: Date;
 
   @Exclude()
+  @Column({ type: 'timestamptz', nullable: true })
+  lastPasswordResetSentAt?: Date;
+
+  @Exclude()
   @Column({ nullable: true })
   verificationToken?: string;
 
@@ -58,6 +62,22 @@ export class User {
   @Exclude()
   @Column({ type: 'timestamptz', nullable: true })
   lastVerificationEmailSent?: Date;
+
+  @Exclude()
+  @Column({ nullable: true })
+  verificationCode?: string;
+
+  @Exclude()
+  @Column({ type: 'timestamptz', nullable: true })
+  verificationCodeExpiresAt?: Date;
+
+  @Exclude()
+  @Column({ nullable: true })
+  passwordResetCode?: string;
+
+  @Exclude()
+  @Column({ type: 'timestamptz', nullable: true })
+  passwordResetCodeExpiresAt?: Date;
 
   @Column({ default: false })
   isVerified: boolean;
@@ -70,7 +90,6 @@ export class User {
 
   @Column({ default: false })
   isSuspended: boolean;
-
 
   @Column({ nullable: true, type: 'varchar', length: 500 })
   profilePicture?: string;
@@ -88,8 +107,12 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({ default: false })
+  twoFactorEnabled: boolean;
+
   @DeleteDateColumn()
   deletedAt: Date;
-  fullName: any;
-  name: any;
+  get fullName(): string {
+    return `${this.firstname} ${this.lastname}`.trim();
+  }
 }

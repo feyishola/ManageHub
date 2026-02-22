@@ -3,15 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 const publicRoutes = ["/", "/login", "/register", "/forgot-password"];
 
 const protectedRoutes = {
-  // "/dashboard": ["users", "admin"],
-  // "/users": ["admin"],
-  // "/admin": ["admin"],
+  "/dashboard": ["users", "admin"],
+  "/users": ["admin"],
+  "/admin": ["admin"],
 } as const;
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("authToken")?.value;
-  console.log(token);
   const isPublicRoute = publicRoutes.includes(pathname);
   const isPrivateRoute = Object.keys(protectedRoutes).some((route) =>
     pathname.startsWith(route),

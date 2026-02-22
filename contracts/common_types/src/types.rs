@@ -167,6 +167,8 @@ pub enum UserRole {
 ///
 /// # Variants
 /// * `Active` - Membership is currently active
+/// * `Paused` - Membership is temporarily paused
+/// * `GracePeriod` - Membership expired but within grace period (usable with restrictions)
 /// * `Expired` - Membership has expired
 /// * `Revoked` - Membership has been revoked
 /// * `Inactive` - Membership is inactive
@@ -175,12 +177,156 @@ pub enum UserRole {
 pub enum MembershipStatus {
     /// Active membership
     Active,
+    /// Temporarily paused membership
+    Paused,
+    /// Expired but within grace period (restricted access)
+    GracePeriod,
     /// Expired membership
     Expired,
     /// Revoked membership
     Revoked,
     /// Inactive membership
     Inactive,
+}
+
+// ============================================================================
+// Attendance Analytics Types
+// ============================================================================
+
+/// Time period options for analytics queries.
+///
+/// Used to group and filter attendance data by specific time ranges.
+///
+/// # Variants
+/// * `Daily` - Daily aggregation
+/// * `Weekly` - Weekly aggregation
+/// * `Monthly` - Monthly aggregation
+/// * `Custom` - Custom date range
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum TimePeriod {
+    /// Daily time period
+    Daily,
+    /// Weekly time period
+    Weekly,
+    /// Monthly time period
+    Monthly,
+    /// Custom date range
+    Custom,
+}
+
+/// Date range structure for filtering attendance records.
+///
+/// Specifies a time window for querying attendance data.
+///
+/// # Fields
+/// * `start_time` - Start timestamp (inclusive)
+/// * `end_time` - End timestamp (inclusive)
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DateRange {
+    /// Start timestamp
+    pub start_time: u64,
+    /// End timestamp
+    pub end_time: u64,
+}
+
+/// Aggregated attendance statistics for a user.
+///
+/// Contains comprehensive attendance metrics including duration,
+/// frequency, and pattern analysis.
+///
+/// # Fields
+/// * `user_id` - User address
+/// * `total_sessions` - Total number of attendance sessions
+/// * `total_duration` - Total time spent (seconds)
+/// * `average_duration` - Average session duration (seconds)
+/// * `first_clock_in` - Timestamp of first attendance
+/// * `last_clock_out` - Timestamp of last departure
+/// * `total_days_present` - Number of unique days with attendance
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct UserAttendanceStats {
+    /// User address
+    pub user_id: Address,
+    /// Total attendance sessions
+    pub total_sessions: u32,
+    /// Total duration in seconds
+    pub total_duration: u64,
+    /// Average session duration in seconds
+    pub average_duration: u64,
+    /// First clock-in timestamp
+    pub first_clock_in: u64,
+    /// Last clock-out timestamp
+    pub last_clock_out: u64,
+    /// Total unique days present
+    pub total_days_present: u32,
+}
+
+/// Attendance frequency metrics for a specific time period.
+///
+/// Tracks attendance frequency patterns and distribution.
+///
+/// # Fields
+/// * `period` - Time period type
+/// * `period_start` - Period start timestamp
+/// * `period_end` - Period end timestamp
+/// * `total_attendances` - Total attendance records in period
+/// * `unique_users` - Number of unique users
+/// * `average_daily_attendance` - Average attendances per day
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct AttendanceFrequency {
+    /// Time period
+    pub period: TimePeriod,
+    /// Period start timestamp
+    pub period_start: u64,
+    /// Period end timestamp
+    pub period_end: u64,
+    /// Total attendance records
+    pub total_attendances: u32,
+    /// Unique users count
+    pub unique_users: u32,
+    /// Average daily attendance
+    pub average_daily_attendance: u32,
+}
+
+/// Peak hour analysis data.
+///
+/// Identifies hours and days with highest attendance activity.
+///
+/// # Fields
+/// * `hour` - Hour of day (0-23)
+/// * `attendance_count` - Number of attendances in this hour
+/// * `percentage` - Percentage of total attendances
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PeakHourData {
+    /// Hour of day (0-23)
+    pub hour: u32,
+    /// Attendance count
+    pub attendance_count: u32,
+    /// Percentage of total
+    pub percentage: u32,
+}
+
+/// Daily attendance pattern data.
+///
+/// Tracks attendance distribution across days of the week.
+///
+/// # Fields
+/// * `day_of_week` - Day (0=Sunday, 6=Saturday)
+/// * `attendance_count` - Number of attendances on this day
+/// * `percentage` - Percentage of total attendances
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DayPattern {
+    /// Day of week (0=Sunday, 6=Saturday)
+    pub day_of_week: u32,
+    /// Attendance count
+    pub attendance_count: u32,
+    /// Percentage of total
+    pub percentage: u32,
 }
 
 // ============================================================================
@@ -507,11 +653,13 @@ mod tests {
     #[test]
     fn test_membership_status_variants() {
         let active = MembershipStatus::Active;
+        let paused = MembershipStatus::Paused;
         let expired = MembershipStatus::Expired;
         let revoked = MembershipStatus::Revoked;
         let inactive = MembershipStatus::Inactive;
 
         assert_eq!(active, MembershipStatus::Active);
+        assert_eq!(paused, MembershipStatus::Paused);
         assert_eq!(expired, MembershipStatus::Expired);
         assert_eq!(revoked, MembershipStatus::Revoked);
         assert_eq!(inactive, MembershipStatus::Inactive);

@@ -9,7 +9,7 @@ import { ValidateUserProvider } from './validateUser.provider';
 import { FindAllUsersProvider } from './findAllUsers.provider';
 import { UpdateUserProvider } from './updateUser.provider';
 import { DeleteUserProvider } from './deleteUser.provider';
-import { AuthResponse } from 'src/auth/interfaces/authResponse.interface';
+import { AuthResponse } from '../../auth/interface/authResponse.interface';
 import { Response } from 'express';
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,6 +23,14 @@ import { FindAdminByIdProvider } from './findAdminById.provider';
 
 @Injectable()
 export class UsersService {
+  async updateTwoFactor(userId: string, data: { twoFactorEnabled: boolean }) {
+    const user = await this.findUserById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    user.twoFactorEnabled = data.twoFactorEnabled;
+    return await this.usersRepository.save(user);
+  }
   constructor(
     private readonly createUserProvider: CreateUserProvider,
     private readonly findOneUserByIdProvider: FindOneUserByIdProvider,
@@ -76,6 +84,20 @@ export class UsersService {
   // FIND USER BY EMAIL
   async findUserByEmail(email: string): Promise<User> {
     return await this.findOneUserByEmailProvider.getUser(email);
+  }
+
+  // FIND USER BY VERIFICATION TOKEN
+  async findByVerificationToken(token: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { verificationToken: token },
+    });
+  }
+
+  // FIND USER BY PASSWORD RESET TOKEN
+  async findByPasswordResetToken(token: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { passwordResetToken: token },
+    });
   }
 
   // UPDATE USER
