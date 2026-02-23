@@ -16,6 +16,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ContactModule } from './contact/contact.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { ProductsModule } from './products/products.module';
     ContactModule,
     DashboardModule,
     ProductsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [
