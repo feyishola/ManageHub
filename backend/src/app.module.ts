@@ -14,6 +14,7 @@ import { NewsletterModule } from './newsletter/newsletter.module';
 import { EmailModule } from './email/email.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ContactModule } from './contact/contact.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { ContactModule } from './contact/contact.module';
       },
     }),
     EmailModule,
+    CategoriesModule,
     AuthModule,
     UsersModule,
     NewsletterModule,
@@ -96,4 +98,4 @@ import { ContactModule } from './contact/contact.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
