@@ -14,6 +14,7 @@ import { NewsletterModule } from './newsletter/newsletter.module';
 import { EmailModule } from './email/email.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ContactModule } from './contact/contact.module';
+import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 
 @Module({
@@ -78,6 +79,7 @@ import { ProductsModule } from './products/products.module';
       },
     }),
     EmailModule,
+    CategoriesModule,
     AuthModule,
     UsersModule,
     NewsletterModule,
