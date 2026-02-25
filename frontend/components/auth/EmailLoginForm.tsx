@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { cn } from '@/utils/cn';
 import { loginSchema, type LoginSchema } from '@/lib/schemas/loginSchema';
@@ -71,7 +70,7 @@ export function EmailLoginForm({ onSubmit, className, isLoading }: EmailLoginFor
             id="email"
             type="email"
             placeholder="Enter your email"
-            className="pl-10"
+            className="pl-10 focus:border-gray-400 focus:ring-gray-300"
             error={errors.email?.message}
             {...register("email")}
           />
@@ -88,7 +87,7 @@ export function EmailLoginForm({ onSubmit, className, isLoading }: EmailLoginFor
             id="password"
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
-            className="pl-10 pr-10 text-black"
+            className="pl-10 pr-10 text-gray-900 focus:border-gray-400 focus:ring-gray-300"
             error={errors.password?.message}
             {...register("password")}
           />
@@ -110,14 +109,14 @@ export function EmailLoginForm({ onSubmit, className, isLoading }: EmailLoginFor
         <label className="flex items-center space-x-2">
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-[#2563EB] focus:ring-[#2563EB]"
+            className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-300"
             {...register("rememberMe")}
           />
           <span className="text-sm text-gray-600">Remember me</span>
         </label>
         <Link
           href={"/forgot-password"}
-          className="text-sm text-[#2563EB] hover:text-blue-700 focus:outline-none focus:underline"
+          className="text-sm text-gray-900 hover:text-gray-700 focus:outline-none focus:underline"
         >
           Forgot password?
         </Link>
@@ -128,17 +127,17 @@ export function EmailLoginForm({ onSubmit, className, isLoading }: EmailLoginFor
   disabled={isLoading}
   className={`
     w-full 
-    bg-blue-500 
+    bg-gray-900 
     text-white 
     font-semibold 
     py-2 px-4 
     rounded-md 
     shadow-sm 
-    hover:bg-blue-600 
+    hover:bg-gray-800 
     hover:cursor-pointer 
     focus:outline-none 
     focus:ring-2 
-    focus:ring-blue-400 
+    focus:ring-gray-300 
     focus:ring-offset-1 
     transition-colors 
     duration-200 
