@@ -257,7 +257,7 @@ export function ForgotPasswordForm() {
                     id="email"
                     type="email"
                     {...emailForm.register("email")}
-                    className={`block w-full pl-10 pr-3 py-3 border rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all ${
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all ${
                       emailError ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter your email address"
@@ -275,7 +275,7 @@ export function ForgotPasswordForm() {
               <button
                 type="submit"
                 disabled={isSendingEmail}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isSendingEmail ? (
                   <>
@@ -301,7 +301,7 @@ export function ForgotPasswordForm() {
 
               <Link
                 href="/login"
-                className="flex items-center justify-center text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                className="flex items-center justify-center text-gray-900 hover:text-gray-700 font-medium transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Sign In
@@ -313,8 +313,8 @@ export function ForgotPasswordForm() {
           {step === "otp" && (
             <div className="space-y-6">
               <div className="flex justify-center mb-2">
-                <div className="bg-blue-100 p-4 rounded-full">
-                  <Mail className="h-10 w-10 text-blue-600" />
+                <div className="bg-gray-100 p-4 rounded-full">
+                  <Mail className="h-10 w-10 text-gray-900" />
                 </div>
               </div>
 
@@ -329,7 +329,7 @@ export function ForgotPasswordForm() {
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-14 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-blue-600 focus:ring-2 focus:ring-blue-600 focus:outline-none bg-white text-gray-900 transition-all"
+                    className="w-14 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-gray-900 focus:ring-2 focus:ring-gray-900 focus:outline-none bg-white text-gray-900 transition-all"
                   />
                 ))}
               </div>
@@ -337,7 +337,7 @@ export function ForgotPasswordForm() {
               <button
                 onClick={onVerifyOtp}
                 disabled={isVerifyingOtp || otp.join("").length !== 4}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isVerifyingOtp ? (
                   <>
@@ -349,14 +349,14 @@ export function ForgotPasswordForm() {
                 )}
               </button>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start">
-                  <Mail className="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" />
+                  <Mail className="h-5 w-5 text-gray-600 mt-0.5 mr-3 flex-shrink-0" />
                   <div className="text-left">
-                    <p className="text-sm font-medium text-blue-900 mb-1">
+                    <p className="text-sm font-medium text-gray-900 mb-1">
                       Didn&apos;t receive the code?
                     </p>
-                    <p className="text-sm text-blue-700">
+                    <p className="text-sm text-gray-700">
                       Check your spam folder or click the resend button below
                     </p>
                   </div>
@@ -366,7 +366,7 @@ export function ForgotPasswordForm() {
               <button
                 onClick={onResendOtp}
                 disabled={cooldown > 0 || isSendingEmail}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {cooldown > 0 ? (
                   <>
@@ -383,7 +383,7 @@ export function ForgotPasswordForm() {
 
               <Link
                 href="/login"
-                className="flex items-center justify-center text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                className="flex items-center justify-center text-gray-900 hover:text-gray-700 font-medium transition-colors"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Sign In
@@ -411,7 +411,7 @@ export function ForgotPasswordForm() {
                         ? "border-red-300 focus:ring-red-500"
                         : password
                           ? "border-teal-300 focus:ring-teal-500"
-                          : "border-gray-300 focus:ring-blue-500"
+                          : "border-gray-300 focus:ring-gray-900"
                     } disabled:bg-gray-50 disabled:cursor-not-allowed`}
                   />
                   <button
@@ -461,7 +461,7 @@ export function ForgotPasswordForm() {
                         ? "border-red-300 focus:ring-red-500"
                         : passwordsMatch
                           ? "border-teal-300 focus:ring-teal-500"
-                          : "border-gray-300 focus:ring-blue-500"
+                          : "border-gray-300 focus:ring-gray-900"
                     } disabled:bg-gray-50 disabled:cursor-not-allowed`}
                   />
                   <button
@@ -493,7 +493,7 @@ export function ForgotPasswordForm() {
               <button
                 type="submit"
                 disabled={isResetting}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-gray-900 hover:bg-gray-800 disabled:opacity-50 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 {isResetting ? (
                   <>
@@ -521,12 +521,12 @@ export function ForgotPasswordForm() {
                 Your password has been reset successfully. You can now sign in with your new password.
               </p>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <Lock className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <Lock className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" />
                   <div className="text-sm text-left">
-                    <p className="font-semibold text-blue-900 mb-1">Keep your password secure</p>
-                    <p className="text-blue-700">
+                    <p className="font-semibold text-gray-900 mb-1">Keep your password secure</p>
+                    <p className="text-gray-700">
                       Never share your password with anyone and consider enabling two-factor authentication.
                     </p>
                   </div>
@@ -535,7 +535,7 @@ export function ForgotPasswordForm() {
 
               <button
                 onClick={() => (window.location.href = "/login")}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 Continue to Sign In
                 <span className="text-xl">&rarr;</span>
@@ -546,16 +546,16 @@ export function ForgotPasswordForm() {
 
         {/* Help Section */}
         {step === "email" && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
             <div className="flex items-start">
               <div className="flex-shrink-0">
-                <AlertCircle className="h-5 w-5 text-blue-600" />
+                <AlertCircle className="h-5 w-5 text-gray-900" />
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-blue-900">Need help?</h3>
-                <p className="mt-1 text-sm text-blue-700">
+                <h3 className="text-sm font-medium text-gray-900">Need help?</h3>
+                <p className="mt-1 text-sm text-gray-700">
                   If you&apos;re having trouble accessing your account, contact our support team at{" "}
-                  <a href="mailto:support@managehub.com" className="font-medium underline hover:text-blue-600">
+                  <a href="mailto:support@managehub.com" className="font-medium underline hover:text-gray-900">
                     support@managehub.com
                   </a>
                 </p>
@@ -569,7 +569,7 @@ export function ForgotPasswordForm() {
           <div className="text-center">
             <p className="text-gray-600">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
+              <Link href="/register" className="text-gray-900 hover:text-gray-700 font-medium">
                 Sign up here
               </Link>
             </p>
