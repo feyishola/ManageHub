@@ -133,14 +133,14 @@ const ResetPasswordPage: React.FC = () => {
               with your new password.
             </p>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
               <div className="flex items-start gap-3">
-                <Lock className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <Lock className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" />
                 <div className="text-sm">
-                  <p className="font-semibold text-blue-900 mb-1">
+                  <p className="font-semibold text-gray-900 mb-1">
                     Keep your password secure
                   </p>
-                  <p className="text-blue-700">
+                  <p className="text-gray-700">
                     Never share your password with anyone and consider enabling
                     two-factor authentication for extra security.
                   </p>
@@ -150,7 +150,7 @@ const ResetPasswordPage: React.FC = () => {
 
             <button
               onClick={() => (window.location.href = "/login")}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               Continue to Sign In
               <span className="text-xl">→</span>
@@ -223,7 +223,7 @@ const ResetPasswordPage: React.FC = () => {
                     ? "border-red-300 focus:ring-red-500"
                     : password
                     ? "border-teal-300 focus:ring-teal-500"
-                    : "border-gray-300 focus:ring-blue-500"
+                    : "border-gray-300 focus:ring-gray-900"
                 } disabled:bg-gray-50 disabled:cursor-not-allowed`}
               />
               <button
@@ -295,7 +295,7 @@ const ResetPasswordPage: React.FC = () => {
                     ? "border-red-300 focus:ring-red-500"
                     : passwordsMatch
                     ? "border-teal-300 focus:ring-teal-500"
-                    : "border-gray-300 focus:ring-blue-500"
+                    : "border-gray-300 focus:ring-gray-900"
                 } disabled:bg-gray-50 disabled:cursor-not-allowed`}
               />
               <button
@@ -341,7 +341,7 @@ const ResetPasswordPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {isSubmitting ? (
               <>
@@ -355,12 +355,12 @@ const ResetPasswordPage: React.FC = () => {
         </form>
 
         {/* Security Tip */}
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+            <Info className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm">
-              <p className="font-semibold text-blue-900 mb-1">Security Tip</p>
-              <p className="text-blue-700">
+              <p className="font-semibold text-gray-900 mb-1">Security Tip</p>
+              <p className="text-gray-700">
                 Use a unique password that you don&#39;t use for other accounts.
                 Consider using a password manager to keep track of your
                 passwords securely.

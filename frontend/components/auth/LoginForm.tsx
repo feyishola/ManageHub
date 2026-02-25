@@ -71,7 +71,7 @@ export default function LoginForm({
   const onSubmit = (values: LoginFormValues) => login(values);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#faf9f7] flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
@@ -86,7 +86,7 @@ export default function LoginForm({
             onClick={() => setLoginMethod("email")}
             className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
               loginMethod === "email"
-                ? "bg-blue-600 text-white shadow-sm"
+                ? "bg-gray-900 text-white shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
@@ -98,7 +98,7 @@ export default function LoginForm({
             onClick={() => setLoginMethod("biometric")}
             className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
               loginMethod === "biometric"
-                ? "bg-blue-600 text-white shadow-sm"
+                ? "bg-gray-900 text-white shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
@@ -130,7 +130,7 @@ export default function LoginForm({
                     type="email"
                     {...register("email")}
                     required
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent transition-all"
                     placeholder="Enter your email"
                   />
                   {errors.email?.message && (
@@ -157,7 +157,7 @@ export default function LoginForm({
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
                     required
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-transparent transition-all"
                     placeholder="Enter your password"
                   />
 
@@ -186,7 +186,7 @@ export default function LoginForm({
                   <input
                     type="checkbox"
                     {...register("rememberMe")}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-gray-900 focus:ring-gray-300 border-gray-300 rounded"
                   />
                   <label
                     htmlFor="remember-me"
@@ -197,7 +197,7 @@ export default function LoginForm({
                 </div>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-blue-600 hover:text-blue-500 font-medium"
+                  className="text-sm text-gray-900 hover:text-gray-700 font-medium"
                 >
                   Forgot password?
                 </Link>
@@ -207,7 +207,7 @@ export default function LoginForm({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                className="w-full bg-gray-900 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 transition-colors"
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
@@ -215,10 +215,10 @@ export default function LoginForm({
           ) : (
             /* Biometric Login Interface */
             <div className="text-center space-y-6">
-              <div className="bg-slate-50 rounded-xl p-8">
+              <div className="bg-[#faf9f7] rounded-xl p-8">
                 <div className="flex justify-center mb-4">
-                  <div className="bg-teal-100 p-4 rounded-full">
-                    <Scan className="h-12 w-12 text-teal-600" />
+                  <div className="bg-gray-200 p-4 rounded-full">
+                    <Scan className="h-12 w-12 text-gray-700" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -230,7 +230,7 @@ export default function LoginForm({
                 </p>
                 <button
                   onClick={handleBiometricLogin}
-                  className="bg-teal-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors"
+                  className="bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 transition-colors"
                 >
                   Start Scan
                 </button>
@@ -241,7 +241,7 @@ export default function LoginForm({
                   Having trouble?
                   <button
                     onClick={() => setLoginMethod("email")}
-                    className="text-blue-600 hover:text-blue-500 font-medium ml-1"
+                    className="text-gray-900 hover:text-gray-700 font-medium ml-1"
                   >
                     Use email login
                   </button>
@@ -257,7 +257,7 @@ export default function LoginForm({
             Don't have an account?{" "}
             <Link
               href="/register"
-              className="text-blue-600 hover:text-blue-500 font-medium"
+              className="text-gray-900 hover:text-gray-700 font-medium"
             >
               Sign up here
             </Link>
