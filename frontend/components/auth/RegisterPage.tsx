@@ -113,12 +113,12 @@ export function RegisterPage({ onRegister, isLoading }: RegisterPageProps) {
   // };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-6 px-4 sm:py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#faf9f7] flex flex-col justify-center py-6 px-4 sm:py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center">
               <Building2 className="w-6 h-6 text-white" />
             </div>
           </div>
@@ -139,8 +139,8 @@ export function RegisterPage({ onRegister, isLoading }: RegisterPageProps) {
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
                   currentStep === "personal-info"
-                    ? "bg-blue-600 text-white"
-                    : "bg-blue-100 text-blue-600"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-200 text-gray-700"
                 )}
               >
                 {currentStep === "account-setup" ? (
@@ -165,7 +165,7 @@ export function RegisterPage({ onRegister, isLoading }: RegisterPageProps) {
             <div
               className={cn(
                 "w-12 h-0.5",
-                currentStep === "account-setup" ? "bg-blue-600" : "bg-gray-300"
+                currentStep === "account-setup" ? "bg-gray-900" : "bg-gray-300"
               )}
             />
 
@@ -175,7 +175,7 @@ export function RegisterPage({ onRegister, isLoading }: RegisterPageProps) {
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
                   currentStep === "account-setup"
-                    ? "bg-blue-600 text-white"
+                    ? "bg-gray-900 text-white"
                     : "bg-gray-200 text-gray-500"
                 )}
               >
@@ -223,7 +223,7 @@ export function RegisterPage({ onRegister, isLoading }: RegisterPageProps) {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-[#2563EB] hover:text-blue-700 focus:outline-none focus:underline font-medium transition-colors"
+              className="text-gray-900 hover:text-gray-700 focus:outline-none focus:underline font-medium transition-colors"
             >
               Sign in here
             </Link>
@@ -277,7 +277,7 @@ function PersonalInfoStep({ form, onSubmit }: PersonalInfoStepProps) {
         </label>
         <Input
           id="fullName"
-          className="text-black"
+          className="text-black focus:border-gray-400 focus:ring-gray-300"
           type="text"
           placeholder="Yusuf N M"
           {...register("fullName")}
@@ -297,6 +297,7 @@ function PersonalInfoStep({ form, onSubmit }: PersonalInfoStepProps) {
         <Input
           id="email"
           type="email"
+          className="focus:border-gray-400 focus:ring-gray-300"
           placeholder="faladeyusuf54@gmail.com"
           {...register("email")}
           error={errors.email?.message}
@@ -315,6 +316,7 @@ function PersonalInfoStep({ form, onSubmit }: PersonalInfoStepProps) {
         <Input
           id="phoneNumber"
           type="tel"
+          className="focus:border-gray-400 focus:ring-gray-300"
           placeholder="+234800033156218"
           {...register("phoneNumber")}
           error={errors.phoneNumber?.message}
@@ -333,6 +335,7 @@ function PersonalInfoStep({ form, onSubmit }: PersonalInfoStepProps) {
         <Input
           id="location"
           type="text"
+          className="focus:border-gray-400 focus:ring-gray-300"
           placeholder="City, Country"
           {...register("location")}
           error={errors.location?.message}
@@ -343,7 +346,7 @@ function PersonalInfoStep({ form, onSubmit }: PersonalInfoStepProps) {
       {/* Continue Button */}
       <Button
         type="submit"
-        className="w-full h-12 text-base font-medium bg-blue-600"
+        className="w-full h-12 text-base font-medium bg-gray-900 hover:bg-gray-800"
         size="lg"
       >
         Continue
@@ -399,7 +402,7 @@ function AccountSetupStep({
               className={cn(
                 "p-4 border rounded-lg text-left transition-all",
                 userType === option.id
-                  ? "border-blue-600 bg-blue-50"
+                  ? "border-gray-900 bg-gray-100"
                   : "border-gray-200 hover:border-gray-300"
               )}
             >
@@ -426,6 +429,7 @@ function AccountSetupStep({
         <Input
           id="organizationName"
           type="text"
+          className="focus:border-gray-400 focus:ring-gray-300"
           placeholder="Your organization name"
           {...register("organizationName")}
           error={errors.organizationName?.message}
@@ -445,6 +449,7 @@ function AccountSetupStep({
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
+            className="focus:border-gray-400 focus:ring-gray-300"
             placeholder="Create a strong password"
             {...register("password")}
             error={errors.password?.message}
@@ -476,6 +481,7 @@ function AccountSetupStep({
           <Input
             id="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
+            className="focus:border-gray-400 focus:ring-gray-300"
             placeholder="Re-enter your password"
             {...register("confirmPassword")}
             error={errors.confirmPassword?.message}
@@ -502,20 +508,20 @@ function AccountSetupStep({
             id="agreeToTerms"
             type="checkbox"
             {...register("agreeToTerms")}
-            className="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="mt-1 h-4 w-4 text-gray-900 border-gray-300 rounded focus:ring-gray-300"
           />
           <label htmlFor="agreeToTerms" className="text-sm text-gray-700">
             I agree to the{" "}
             <button
               type="button"
-              className="text-blue-600 hover:text-blue-700 focus:outline-none focus:underline"
+              className="text-gray-900 hover:text-gray-700 focus:outline-none focus:underline"
             >
               Terms and Conditions
             </button>{" "}
             and{" "}
             <button
               type="button"
-              className="text-blue-600 hover:text-blue-700 focus:outline-none focus:underline"
+              className="text-gray-900 hover:text-gray-700 focus:outline-none focus:underline"
             >
               Privacy Policy
             </button>
@@ -534,7 +540,7 @@ function AccountSetupStep({
           type="button"
           variant="outline"
           onClick={onBack}
-          className="flex-1 h-12 bg-blue-600"
+          className="flex-1 h-12 bg-gray-900 hover:bg-gray-800"
           size="lg"
         >
           Back
@@ -543,7 +549,7 @@ function AccountSetupStep({
           type="submit"
           loading={isSubmitting}
           disabled={isSubmitting}
-          className="flex-1 h-12 text-base font-medium bg-blue-600"
+          className="flex-1 h-12 text-base font-medium bg-gray-900 hover:bg-gray-800"
           size="lg"
         >
           Create Account
