@@ -1,15 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
+import { Button, buttonVariants } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { Switch } from '@/components/ui/Switch';
 import { Card } from '@/components/ui/Card';
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
+import { apiClient } from '@/lib/apiClient';
+import { useAuthStore } from '@/lib/store/authStore';
+import { cn } from '@/lib/utils';
 
 // Note: metadata must live in a separate layout.ts/page metadata export
 // since this is a 'use client' component. Move to a parent layout if needed.
@@ -20,7 +24,7 @@ const SettingsSchema = z.object({
   emailNotifications: z.boolean(),
   inAppNotifications: z.boolean(),
   language: z.string(),
-  theme: z.enum(['light', 'dark']),
+  theme: z.enum(['light', 'dark', 'system']),
 });
 
 type SettingsFormValues = z.infer<typeof SettingsSchema>;
@@ -31,16 +35,32 @@ const mockUserSettings: SettingsFormValues = {
   emailNotifications: true,
   inAppNotifications: true,
   language: 'en',
-  theme: 'light',
+  theme: 'system',
 };
 
+const THEME_OPTIONS: Array<{ label: string; value: SettingsFormValues['theme'] }> = [
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+  { label: 'System', value: 'system' },
+];
+
 export default function SettingsPage() {
+  const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
   const [loading, setLoading] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<SettingsFormValues['theme']>(
+    mockUserSettings.theme
+  );
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     control,
     formState: { errors },
   } = useForm<SettingsFormValues>({
@@ -50,7 +70,13 @@ export default function SettingsPage() {
 
   useEffect(() => {
     reset(mockUserSettings);
+    setSelectedTheme(mockUserSettings.theme);
   }, [reset]);
+
+  const handleThemeSelect = (theme: SettingsFormValues['theme']) => {
+    setSelectedTheme(theme);
+    setValue('theme', theme, { shouldDirty: true });
+  };
 
   const onSubmit = async (data: SettingsFormValues) => {
     try {
@@ -61,6 +87,44 @@ export default function SettingsPage() {
       toast.error('Failed to save settings');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openDeleteModal = () => {
+    setDeleteConfirmationText('');
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = (force = false) => {
+    if (isDeletingAccount && !force) return;
+    setShowDeleteModal(false);
+    setDeleteConfirmationText('');
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user?.id) {
+      toast.error('Unable to identify your account. Please sign in again.');
+      return;
+    }
+
+    if (deleteConfirmationText !== 'DELETE') {
+      toast.error('Please type DELETE to confirm.');
+      return;
+    }
+
+    try {
+      setIsDeletingAccount(true);
+      await apiClient.delete(`/users/${user.id}`);
+      clearAuth();
+      closeDeleteModal(true);
+      toast.success('Account deleted successfully.');
+      router.push('/');
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to delete account';
+      toast.error(message);
+    } finally {
+      setIsDeletingAccount(false);
     }
   };
 
@@ -132,22 +196,102 @@ export default function SettingsPage() {
               ]}
               defaultValue={mockUserSettings.language}
             />
-            <Select
-              label="Theme"
-              {...register('theme')}
-              options={[
-                { label: 'Light', value: 'light' },
-                { label: 'Dark', value: 'dark' },
-              ]}
-              defaultValue={mockUserSettings.theme}
-            />
+          </div>
+        </Card>
+
+        {/* Appearance */}
+        <Card title="Appearance">
+          <div className="space-y-3">
+            <h2 className="text-base font-semibold text-gray-900">Appearance</h2>
+            <p className="text-sm text-gray-500">
+              Choose how ManageHub should look for your account.
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {THEME_OPTIONS.map((themeOption) => {
+                const isActive = selectedTheme === themeOption.value;
+
+                return (
+                  <button
+                    key={themeOption.value}
+                    type="button"
+                    className={cn(
+                      buttonVariants({ variant: 'outline' }),
+                      'h-11 w-full border text-sm font-medium transition-colors',
+                      isActive
+                        ? 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white'
+                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    )}
+                    onClick={() => handleThemeSelect(themeOption.value)}
+                  >
+                    {themeOption.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </Card>
 
         <Button type="submit" disabled={loading}>
           {loading ? 'Saving...' : 'Save Settings'}
         </Button>
+
+        <div className="rounded-xl border border-red-300 bg-red-50 p-6">
+          <h2 className="text-lg font-semibold text-red-700">Danger Zone</h2>
+          <p className="mt-2 text-sm text-red-700/90">
+            Deleting your account is permanent and cannot be undone.
+          </p>
+          <div className="mt-4">
+            <Button type="button" variant="destructive" onClick={openDeleteModal}>
+              Delete Account
+            </Button>
+          </div>
+        </div>
       </form>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900">Delete Account</h3>
+            <p className="mt-2 text-sm text-gray-600">
+              To confirm account deletion, type <span className="font-semibold">DELETE</span>{' '}
+              below.
+            </p>
+
+            <div className="mt-4 space-y-2">
+              <label htmlFor="delete-confirmation" className="text-sm font-medium text-gray-700">
+                Confirmation
+              </label>
+              <input
+                id="delete-confirmation"
+                type="text"
+                value={deleteConfirmationText}
+                onChange={(event) => setDeleteConfirmationText(event.target.value)}
+                placeholder="Type DELETE"
+                className="h-11 w-full rounded-lg border border-gray-300 px-3 text-sm outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+              />
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={closeDeleteModal}
+                disabled={isDeletingAccount}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={handleDeleteAccount}
+                disabled={isDeletingAccount || deleteConfirmationText !== 'DELETE'}
+              >
+                {isDeletingAccount ? 'Deleting...' : 'Confirm Deletion'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
