@@ -6,13 +6,14 @@ import { z } from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
+import { Button, buttonVariants } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
 import { Switch } from '@/components/ui/Switch';
 import { Card } from '@/components/ui/Card';
 import { toast } from 'sonner';
 import { apiClient } from '@/lib/apiClient';
 import { useAuthStore } from '@/lib/store/authStore';
+import { cn } from '@/lib/utils';
 
 // Note: metadata must live in a separate layout.ts/page metadata export
 // since this is a 'use client' component. Move to a parent layout if needed.
@@ -23,7 +24,7 @@ const SettingsSchema = z.object({
   emailNotifications: z.boolean(),
   inAppNotifications: z.boolean(),
   language: z.string(),
-  theme: z.enum(['light', 'dark']),
+  theme: z.enum(['light', 'dark', 'system']),
 });
 
 type SettingsFormValues = z.infer<typeof SettingsSchema>;
@@ -34,14 +35,23 @@ const mockUserSettings: SettingsFormValues = {
   emailNotifications: true,
   inAppNotifications: true,
   language: 'en',
-  theme: 'light',
+  theme: 'system',
 };
+
+const THEME_OPTIONS: Array<{ label: string; value: SettingsFormValues['theme'] }> = [
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+  { label: 'System', value: 'system' },
+];
 
 export default function SettingsPage() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const clearAuth = useAuthStore((state) => state.clearAuth);
   const [loading, setLoading] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<SettingsFormValues['theme']>(
+    mockUserSettings.theme
+  );
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -50,6 +60,7 @@ export default function SettingsPage() {
     register,
     handleSubmit,
     reset,
+    setValue,
     control,
     formState: { errors },
   } = useForm<SettingsFormValues>({
@@ -59,7 +70,13 @@ export default function SettingsPage() {
 
   useEffect(() => {
     reset(mockUserSettings);
+    setSelectedTheme(mockUserSettings.theme);
   }, [reset]);
+
+  const handleThemeSelect = (theme: SettingsFormValues['theme']) => {
+    setSelectedTheme(theme);
+    setValue('theme', theme, { shouldDirty: true });
+  };
 
   const onSubmit = async (data: SettingsFormValues) => {
     try {
@@ -179,15 +196,38 @@ export default function SettingsPage() {
               ]}
               defaultValue={mockUserSettings.language}
             />
-            <Select
-              label="Theme"
-              {...register('theme')}
-              options={[
-                { label: 'Light', value: 'light' },
-                { label: 'Dark', value: 'dark' },
-              ]}
-              defaultValue={mockUserSettings.theme}
-            />
+          </div>
+        </Card>
+
+        {/* Appearance */}
+        <Card title="Appearance">
+          <div className="space-y-3">
+            <h2 className="text-base font-semibold text-gray-900">Appearance</h2>
+            <p className="text-sm text-gray-500">
+              Choose how ManageHub should look for your account.
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {THEME_OPTIONS.map((themeOption) => {
+                const isActive = selectedTheme === themeOption.value;
+
+                return (
+                  <button
+                    key={themeOption.value}
+                    type="button"
+                    className={cn(
+                      buttonVariants({ variant: 'outline' }),
+                      'h-11 w-full border text-sm font-medium transition-colors',
+                      isActive
+                        ? 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white'
+                        : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    )}
+                    onClick={() => handleThemeSelect(themeOption.value)}
+                  >
+                    {themeOption.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </Card>
 
